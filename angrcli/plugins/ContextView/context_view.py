@@ -39,6 +39,7 @@ class ContextView(SimStatePlugin):
         super(ContextView, self).__init__()
         self.use_only_linear_disasm = use_only_linear_disasm
         self.disable_linear_disasm_fallback = disable_linear_disasm_fallback
+        self._explorer = None
 
     def set_state(self, state: SimState) -> None:
         super(ContextView, self).set_state(state)
@@ -111,6 +112,10 @@ class ContextView(SimStatePlugin):
 
         # This is a hack to allow this method to be monkey patched as the __repr__ method of a state
         return ""
+
+    def explore(self):
+        from angrcli.interaction.explore import ExploreInteractive
+        ExploreInteractive(self.state.project, self.state).cmdloop()
 
     def print_registers_pane(self) -> None:
         for reg in self.default_registers():
